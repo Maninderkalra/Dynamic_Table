@@ -1,0 +1,265 @@
+<div class="row ms-2 me-2">
+  <div class="col-3">
+    <p>Name of the Jobs/WO No.</p>
+    <hr class="mt-2 mb-2" />
+    <div
+      class="list-group list-group-horizontal row"
+      *ngFor="let list of jobListData; let i = index"
+      (click)="listClick(list)"
+    >
+      <label class="list-group-item col-8">
+        <input class="form-check-input me-1" type="checkbox" value="" />
+        <small>{{ list.name }}</small>
+      </label>
+      <label class="list-group-item col-4">
+        <small>{{ list.waNumber }}</small>
+      </label>
+    </div>
+  </div>
+  <ng-container *ngIf="showDiv">
+    <!--Detail Form-->
+    <div class="col-3 vertical-right-line">
+      <p>
+        <span>Details</span
+        ><span class="float-end"
+          ><i class="fa fa-pencil" aria-hidden="true"></i>
+        </span>
+      </p>
+      <hr class="mt-1 mb-2" />
+      <form
+        class="row g-3 detail-form"
+        name="form"
+        #f="ngForm"
+        (ngSubmit)="f.form.valid && onSubmitDetailForm()"
+        novalidate
+      >
+        <div>
+          <label for="txtName" class="form-label">Customer Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="txtName"
+            [(ngModel)]="detailForm.customerName"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div>
+          <label for="txtSiteName" class="form-label">Site Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="txtSiteName"
+            [(ngModel)]="detailForm.siteName"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div>
+          <label for="txtName" class="form-label"> Contact Person</label>
+          <input
+            type="text"
+            class="form-control"
+            name="txtContactPerson"
+            [(ngModel)]="detailForm.contactPerson"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div>
+          <label for="txtEmail" class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            name="email"
+            [(ngModel)]="detailForm.email"
+            [ngModelOptions]="{ standalone: true }"
+            email
+            #email="ngModel"
+            [ngClass]="{ 'is-invalid': f.submitted && email.errors }"
+          />
+          <div *ngIf="f.submitted && email.errors" class="invalid-feedback">
+            <div *ngIf="email.errors['email']">Email is invalid</div>
+          </div>
+        </div>
+        <div>
+          <label for="txtPhone" class="form-label">Phone No. </label>
+          <input
+            type="text"
+            class="form-control"
+            id="txtPhone"
+            placeholder="1234"
+            [(ngModel)]="detailForm.phoneNumber"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+        <div>
+          <label for="txtPhone" class="form-label">Description </label>
+          <input
+            type="text"
+            class="form-control"
+            id="txtDescription"
+            [(ngModel)]="detailForm.description"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+
+        <div class="mt-2">
+          <hr class="mb-2" />
+          <button
+            type="button"
+            class="btn btn-secondary me-2"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-secondary">Save</button>
+        </div>
+      </form>
+    </div>
+    <!--end detail modal-->
+
+    <!--Assign User modal-->
+    <div class="col-6">
+      <div>
+        <p>
+          <span>Assigned User</span
+          ><span class="float-end"
+            ><a
+              href="#"
+              data-bs-toggle="modal"
+              data-bs-target="#assignUserModal"
+              >Assign User</a
+            ></span
+          >
+        </p>
+        <hr class="h6" />
+      </div>
+      <app-common-table-collection
+        [tableHeader]="assignTblHeader"
+        [tableData]="assignTblData"
+        (buttonClickEmitter)="btnClick($event)"
+      ></app-common-table-collection>
+    </div>
+
+    <!--Assign user Modal-->
+    <div
+      class="modal fade"
+      id="assignUserModal"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="assignUserModalLable"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title custom-modal-title">Assign User</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form
+              class="row g-3"
+              name="assignedForm"
+              #form="ngForm"
+              (ngSubmit)="form.form.valid && onAssignUserModalSubmit()"
+              novalidate
+            >
+              <div class="col-md-6">
+                <label for="txtAssignEmail" class="form-label">Email*</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  name="txtAssignEmail"
+                  id="txtAssignEmail"
+                  [(ngModel)]="assignUserForm.email"
+                  required
+                  email
+                  #txtAssignEmail="ngModel"
+                  [ngClass]="{
+                    'is-invalid': form.submitted && txtAssignEmail.errors
+                  }"
+                />
+                <div
+                  *ngIf="form.submitted && txtAssignEmail.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="txtAssignEmail.errors['required']">
+                    Email is required
+                  </div>
+                  <div *ngIf="txtAssignEmail.errors['email']">
+                    Email is invalid
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <label for="dropDownAccessType" class="form-label"
+                  >Access Type
+                </label>
+                <select
+                  #dropDownAccessType
+                  id="dropDownAccessType"
+                  class="form-select"
+                  name="dropDownAccessType"
+                  [(ngModel)]="assignUserForm.accessType"
+                >
+                  <option value="1">View</option>
+                  <option value="2">Edit</option>
+                </select>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-secondary">Assign</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Assign User Delete Modal -->
+    <div
+      class="modal fade"
+      id="deleteAssignUser"
+      tabindex="-1"
+      aria-labelledby="deleteAssignUserLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+            Are you sure you want to delete<br />
+            <strong>{{ assignedUserName }}</strong> user?
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="btnDelete"
+              (click)="btnDeleteAssignedUserClick('btnDelete')"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--end Assign User modal-->
+  </ng-container>
+</div>

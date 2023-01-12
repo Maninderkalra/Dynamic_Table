@@ -1,0 +1,230 @@
+<div class="mt-3">
+  <div class="mb-5">
+    <h2 class="d-inline col-auto ms-2">SiteMap Admin - {{ tabValue }}</h2>
+
+    <!--Sites header -->
+    <div *ngIf="tabValue === 'Sites'" class="col-auto d-inline float-end ms-2">
+      <button type="button" class="btn btn-secondary">Create Site</button>
+      <button type="button" class="btn btn-outline-dark ms-2">
+        <i class="fa fa-trash" aria-hidden="true"></i>
+      </button>
+      <button type="button" class="btn btn-outline-dark ms-2 me-2">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </button>
+    </div>
+    <!--end Sites Header -->
+
+    <!--Jobs header -->
+    <div *ngIf="tabValue === 'Jobs'" class="col-auto d-inline float-end ms-2">
+      <button type="button" class="btn btn-secondary">View Job on MAP</button>
+      <button
+        type="button"
+        class="btn btn-secondary ms-2"
+        data-bs-toggle="modal"
+        data-bs-target="#addNewJob"
+      >
+        Add Job
+      </button>
+      <button type="button" id="btnJobDelete" class="btn btn-outline-dark ms-2">
+        <i class="fa fa-trash" aria-hidden="true"></i>
+      </button>
+      <button type="button" class="btn btn-outline-dark ms-2 me-2">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </button>
+    </div>
+    <!--end Jobs Header -->
+
+    <!--User header -->
+    <div *ngIf="tabValue === 'Users'" class="col-auto d-inline float-end ms-2">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        data-bs-toggle="modal"
+        data-bs-target="#informations"
+      >
+        Add New User
+      </button>
+      <button type="button" class="btn btn-outline-dark ms-2">
+        <i class="fa fa-lock" aria-hidden="true"></i>
+      </button>
+      <button type="button" class="btn btn-outline-dark ms-2">
+        <i class="fa fa-envelope" aria-hidden="true"></i>
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark ms-2 me-2"
+        data-bs-toggle="modal"
+        data-bs-target="#deleteModal"
+      >
+        <i class="fa fa-trash" aria-hidden="true"></i>
+      </button>
+    </div>
+    <!--end User Header -->
+
+    <!--Role header -->
+    <div *ngIf="tabValue === 'Roles'" class="col-auto d-inline float-end ms-2">
+      <button type="button" class="btn btn-secondary">Add New Role</button>
+      <button type="button" class="btn btn-outline-dark ms-2 me-2">
+        <i class="fa fa-trash" aria-hidden="true"></i>
+      </button>
+    </div>
+    <!--end Role Header -->
+
+    <div class="col-3 d-inline float-end">
+      <input
+        #txtSearch
+        type="text"
+        class="form-control d-inline"
+        [placeholder]="searchPlaceHolder"
+        aria-label="search"
+        aria-describedby="search"
+        (input)="onSearchChange(txtSearch.value)"
+      />
+    </div>
+  </div>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+      <a
+        class="nav-link active"
+        data-bs-toggle="tab"
+        href="#sites"
+        (click)="tabClick('sites')"
+        >Manage Sites</a
+      >
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        data-bs-toggle="tab"
+        href="#jobs"
+        (click)="tabClick('jobs')"
+        >Manage Jobs</a
+      >
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        data-bs-toggle="tab"
+        href="#users"
+        (click)="tabClick('users')"
+        >Manage Users</a
+      >
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        data-bs-toggle="tab"
+        href="#roles"
+        (click)="tabClick('roles')"
+        >Manage Roles</a
+      >
+    </li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content mt-3">
+    <div id="sites" class="tab-pane active">
+      <span>WIP for sites</span>
+    </div>
+    <div id="jobs" class="tab-pane fade">
+      <app-manage-jobs [searchValue]="searchValue"></app-manage-jobs>
+    </div>
+    <div id="users" class="tab-pane fade">
+      <app-admin-user
+        [searchValue]="searchValue"
+        (selectedData)="manageUserSelectedData($event)"
+      ></app-admin-user>
+    </div>
+    <div id="roles" class="tab-pane fade">
+      <app-manage-roles [searchValue]="searchValue"></app-manage-roles>
+    </div>
+  </div>
+</div>
+
+<!--Add user Modal-->
+<div
+  #information
+  class="modal fade"
+  id="informations"
+  tabindex="-1"
+  aria-labelledby="informationModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <app-add-edit-user [modalTittle]="'Add User'"></app-add-edit-user>
+    </div>
+  </div>
+</div>
+
+<!--delete Modal-->
+<div
+  class="modal fade"
+  id="deleteModal"
+  tabindex="-1"
+  aria-labelledby="deleteModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        Are you sure you want to delete below data?<br />
+        <span *ngIf="userSelectedData"
+          ><ng-container *ngFor="let deleteModalData of userSelectedData">
+            <span>User Name: </span
+            ><strong>{{ deleteModalData.data.name }}</strong
+            ><br />
+          </ng-container>
+        </span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          id="btnDelete"
+          (click)="btnDeleteClick('btnDelete')"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add New Job Modal -->
+<div
+  class="modal fade"
+  id="addNewJob"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="addNewJobLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title custom-modal-title" id="addNewJobLabel">
+          <span>Add New Job</span>
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="btnJobCloseModal()"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <app-add-new-job
+          id="addNewFormModal"
+          footerClass="modal-footer"
+        ></app-add-new-job>
+      </div>
+    </div>
+  </div>
+</div>

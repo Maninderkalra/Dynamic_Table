@@ -1,0 +1,41 @@
+/*==========
+Table Pagination
+=============*/
+.custom-table-pagination li {
+  display: inline-block;
+  list-style: none;
+  border: 1px solid var(--borderColor);
+  /* padding: 6px; */
+}
+.custom-table-pagination li a {
+  display: block;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 1px 8px;
+  margin: 0 auto;
+  width: 100%;
+}
+@media (max-width: 1200px) {
+  .custom-table-pagination li a {
+    padding: 0px 3px;
+  }
+}
+.custom-table-pagination li a:hover {
+  background: var(--tableTh);
+}
+.custom-table-pagination li.active a {
+  font-weight: bold !important;
+  background: var(--tableTh);
+}
+
+@media (max-width: 576px) {
+  .custom-table-pagination {
+    float: none;
+    text-align: right;
+  }
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}

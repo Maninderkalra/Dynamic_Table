@@ -1,0 +1,178 @@
+<div *ngIf="tableHeader.length > 0 && tableData.length > 0; else noData">
+  <nav aria-label="Page navigation example" *ngIf="isPagination">
+    <ul
+      *ngIf="pager.pages && pager.pages.length"
+      class="pagination justify-content-end custom-table-pagination"
+    >
+      <li class="page-item" [ngClass]="{ disabled: pager.currentPage === 1 }">
+        <a (click)="setPage(1)">First</a>
+      </li>
+      <li class="page-item" [ngClass]="{ disabled: pager.currentPage === 1 }">
+        <a (click)="setPage(pager.currentPage - 1)">&#60;</a>
+      </li>
+      <li
+        class="page-item"
+        *ngFor="let page of pager.pages"
+        [ngClass]="{ active: pager.currentPage === page }"
+      >
+        <a (click)="setPage(page)">{{ page }}</a>
+      </li>
+      <li
+        class="page-item"
+        [ngClass]="{ disabled: pager.currentPage == pager.totalPages }"
+      >
+        <a (click)="setPage(pager.currentPage + 1)">&#62;</a>
+      </li>
+      <li
+        class="page-item"
+        [ngClass]="{ disabled: pager.currentPage == pager.totalPages }"
+      >
+        <a (click)="setPage(pager.totalPages)">Last</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="table-responsive">
+    <table class="table table-hover" [class]="tblClass">
+      <thead>
+        <tr>
+          <ng-container *ngFor="let header of tableHeader">
+            <th [id]="header.columnName" scope="col" [class]="header.class">
+              <span *ngIf="header.visible; else notVisible">{{
+                header.displayName
+              }}</span>
+              <ng-template #notVisible>
+                <span></span>
+              </ng-template>
+            </th>
+          </ng-container>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of tableDataWithPage; let ind = index">
+          <ng-container *ngFor="let header of tableHeader">
+            <td *ngIf="header.span">
+              <span *ngIf="header.icon" class="pe-1">
+                <i class="fa {{ data[header.columnName + 'Icon'] }}"></i> </span
+              >{{ data[header.columnName] }}
+            </td>
+            <td *ngIf="header.link">
+              <span *ngIf="isArray(data[header.columnName]); else linkSingle">
+                <ng-container *ngFor="let linkBtn of data[header.columnName]">
+                  <a
+                    href="#"
+                    [attr.data-bs-toggle]="linkBtn.dataBsToggle"
+                    [attr.data-bs-target]="linkBtn.dataBsTarget"
+                    [id]="data.id + '_' + header.columnName"
+                    (click)="onLinkClick(data, header)"
+                    >{{ linkBtn[header.columnName] }}</a
+                  ></ng-container
+                >
+              </span>
+              <ng-template #linkSingle>
+                <a
+                  href="#"
+                  [id]="data.id + '_' + header.columnName"
+                  (click)="onLinkClick(data, header)"
+                >
+                  {{ data[header.columnName] }}</a
+                >
+              </ng-template>
+            </td>
+            <td *ngIf="header.text">
+              <input type="text" class="form-control" />
+            </td>
+            <td *ngIf="header.checkBox">
+              <input
+                type="checkbox"
+                [id]="data.id"
+                name="chkBox"
+                [(ngModel)]="data[header.columnName]"
+                [value]="data[header.columnName]"
+                (change)="onCheckboxClick(data, header)"
+              />
+              <label
+                *ngIf="data['checkBoxName']"
+                class="form-check-label"
+                [for]="data.id"
+              >
+                <small>{{ data.checkBoxName }}</small>
+              </label>
+            </td>
+            <td *ngIf="header.button">
+              <div *ngIf="isArray(data[header.columnName]); else singleButton">
+                <ng-container *ngFor="let btn of data[header.columnName]">
+                  <button
+                    type="button"
+                    class="btn btn-outline-dark btn-sm me-2"
+                    [attr.data-bs-toggle]="btn.dataBsToggle"
+                    [attr.data-bs-target]="btn.dataBsTarget"
+                    (click)="onButtonClick(data, btn.dataBsTarget)"
+                  >
+                    <i
+                      *ngIf="header.icon; else notIcon"
+                      [title]="btn.tooltip"
+                      class="fa"
+                      [class]="btn.icon"
+                      aria-hidden="true"
+                    ></i>
+                    <ng-template #notIcon>{{ btn.btnName }}</ng-template>
+                  </button>
+                </ng-container>
+              </div>
+              <ng-template #singleButton>
+                <button
+                  type="button"
+                  class="btn btn-outline-dark btn-sm"
+                  (click)="onButtonClick(data, header)"
+                >
+                  {{ data[header.columnName] }}
+                </button>
+              </ng-template>
+            </td>
+            <td *ngIf="header.dropDown">
+              <select
+                #dropDown
+                [(ngModel)]="data[header.columnName]"
+                name="data.id"
+                id="data.id"
+                (change)="onOptionsSelected(dropDown.value)"
+              >
+                <ng-container *ngFor="let options of dropDownVal">
+                  <option [value]="options.value">{{ options.name }}</option>
+                </ng-container>
+              </select>
+            </td>
+            <td *ngIf="header.dropDownButton">
+              <div class="d-inline me-3">
+                <select
+                  #mySelect
+                  [(ngModel)]="data[header.columnName]"
+                  name="data.id"
+                  id="data.id"
+                  (change)="onOptionsSelected(mySelect.value)"
+                >
+                  <ng-container *ngFor="let options of dropDownVal">
+                    <option [value]="options.value">{{ options.name }}</option>
+                  </ng-container>
+                </select>
+              </div>
+              <button
+                type="button"
+                class="btn btn-outline-dark btn-sm"
+                (click)="onButtonClick(data, header)"
+              >
+                save
+              </button>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<ng-template #noData>
+  <div>
+    <p class="text-center text-danger">No Data Found</p>
+  </div>
+</ng-template>

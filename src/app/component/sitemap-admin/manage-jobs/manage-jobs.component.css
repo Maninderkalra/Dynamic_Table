@@ -1,0 +1,8 @@
+.detail-form label {
+  font-size: small;
+  margin-bottom: 0;
+}
+
+.detail-form .form-control {
+  border-radius: 0;
+}

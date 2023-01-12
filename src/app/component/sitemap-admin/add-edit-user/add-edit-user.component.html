@@ -1,0 +1,106 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="informationModalLabel">
+    {{ modalTittle }}
+  </h5>
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="modal"
+    aria-label="Close"
+  ></button>
+</div>
+<div class="modal-body">
+  <form
+    class="row g-3"
+    name="form"
+    #f="ngForm"
+    (ngSubmit)="f.form.valid && onSubmit()"
+    novalidate
+  >
+    <div class="col-md-6">
+      <label for="txtName" class="form-label">User Name*</label>
+      <input
+        type="text"
+        class="form-control"
+        name="txtName"
+        [(ngModel)]="informationModalData.name"
+        [ngModelOptions]="{ standalone: true }"
+        required
+        #txtName="ngModel"
+        [ngClass]="{ 'is-invalid': f.submitted && txtName.errors }"
+      />
+      <div *ngIf="f.submitted && txtName.errors" class="invalid-feedback">
+        <div *ngIf="txtName.errors['required']">UserName is required</div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="txtEmail" class="form-label">Email</label>
+      <input
+        type="email"
+        class="form-control"
+        name="email"
+        [(ngModel)]="informationModalData.email"
+        [ngModelOptions]="{ standalone: true }"
+        email
+        #email="ngModel"
+        [ngClass]="{ 'is-invalid': f.submitted && email.errors }"
+      />
+      <div *ngIf="f.submitted && email.errors" class="invalid-feedback">
+        <div *ngIf="email.errors['email']">Email is invalid</div>
+      </div>
+    </div>
+    <div class="col-6">
+      <label for="txtPhone" class="form-label">Phone No. </label>
+      <input
+        type="text"
+        class="form-control"
+        id="txtPhone"
+        placeholder="1234"
+        [(ngModel)]="informationModalData.phone"
+        [ngModelOptions]="{ standalone: true }"
+      />
+    </div>
+    <div class="col-6">
+      <label for="dropDownRole" class="form-label">Role* </label>
+      <select
+        class="form-select"
+        name="dropDownRole"
+        [(ngModel)]="selectedRole"
+        [ngModelOptions]="{ standalone: true }"
+        (change)="onRoleSelected(dropDownRole.value)"
+        required
+        #dropDownRole="ngModel"
+        [ngClass]="{ 'is-invalid': f.submitted && dropDownRole.errors }"
+      >
+        <ng-container *ngFor="let options of dropDownRoles">
+          <option [value]="options.value">{{ options.name }}</option>
+        </ng-container>
+      </select>
+      <div *ngIf="f.submitted && dropDownRole.errors" class="invalid-feedback">
+        <div *ngIf="dropDownRole.errors['required']">Role is required</div>
+      </div>
+    </div>
+    <div class="col-6">
+      <label for="dropDownTier" class="form-label">Subscription Tier</label>
+      <select
+        #dropDownTier
+        name="dropDownTier"
+        class="form-select"
+        id="dropDownTier"
+        [(ngModel)]="subTier"
+        [ngModelOptions]="{ standalone: true }"
+        (change)="onTierSelected(dropDownTier.value)"
+      >
+        <ng-container *ngFor="let options of dropDownTiers">
+          <option [value]="options.value">{{ options.name }}</option>
+        </ng-container>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-secondary">Save</button>
+    </div>
+  </form>
+</div>

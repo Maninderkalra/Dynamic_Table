@@ -1,0 +1,168 @@
+<form
+  class="row g-3"
+  name="form"
+  id="f"
+  #f="ngForm"
+  (ngSubmit)="f.form.valid && onSubmit()"
+  novalidate
+>
+  <div class="col-lg-4">
+    <div class="mb-3">
+      <label for="txtJobName" class="form-label"
+        >Job Name <span class="custom-form-label-star">*</span></label
+      >
+      <input
+        type="text"
+        class="form-control"
+        name="txtName"
+        [(ngModel)]="addFormValue.jobName"
+        required
+        #txtName="ngModel"
+        [ngClass]="{ 'is-invalid': f.submitted && txtName.errors }"
+      />
+      <div *ngIf="f.submitted && txtName.errors" class="invalid-feedback">
+        <div *ngIf="txtName.errors['required']">Job Name is required</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="mb-3">
+      <label for="txtwoNumber" class="form-label">WO Number</label>
+      <input
+        type="text"
+        class="form-control"
+        id="txtwoNumber"
+        name="txtwoNumber"
+        [(ngModel)]="addFormValue.woNumber"
+      />
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="mb-3">
+      <label for="txtCustomerName" class="form-label">Customer Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="txtCustomerName"
+        name="txtCustomerName"
+        [(ngModel)]="addFormValue.customerName"
+      />
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="mb-3">
+      <label for="txtSiteName" class="form-label">Site Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="txtSiteName"
+        name="txtSiteName"
+        [(ngModel)]="addFormValue.siteName"
+      />
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="mb-3">
+      <label for="txtContactPerson" class="form-label">Contact Person</label>
+      <input
+        type="text"
+        class="form-control"
+        id="txtContactPerson"
+        name="txtContactPerson"
+        [(ngModel)]="addFormValue.contactPerson"
+      />
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="mb-3">
+      <label for="txtEmail" class="form-label">Email</label>
+      <input
+        type="email"
+        class="form-control"
+        name="txtEmail"
+        [(ngModel)]="addFormValue.email"
+        [ngModelOptions]="{ standalone: true }"
+        email
+        #txtEmail="ngModel"
+        [ngClass]="{ 'is-invalid': f.submitted && txtEmail.errors }"
+      />
+      <div *ngIf="f.submitted && txtEmail.errors" class="invalid-feedback">
+        <div *ngIf="txtEmail.errors['email']">Email is invalid</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="mb-3">
+      <label for="txtPhone" class="form-label">Phone Number</label>
+      <input
+        type="number"
+        class="form-control"
+        id="txtPhone"
+        name="txtPhone"
+        [(ngModel)]="addFormValue.phoneNumber"
+      />
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label"
+        >Assigned To</label
+      >
+      <select
+        class="form-select"
+        aria-label="Default select example"
+        [(ngModel)]="addFormValue.assignedTo"
+        [ngModelOptions]="{ standalone: true }"
+      >
+        <option value="1">View</option>
+        <option value="2">Edit</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="mt-4 mb-3">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="chkCAD"
+          [(ngModel)]="addFormValue.CAD"
+          [ngModelOptions]="{ standalone: true }"
+        />
+        <label class="form-check-label" for="chkCAD"> CAD Required? </label>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-12">
+    <div class="mb-3">
+      <label for="txtDescription" class="form-label">Description</label>
+      <textarea
+        class="form-control"
+        id="description"
+        rows="2"
+        name="txtDescription"
+        [(ngModel)]="addFormValue.description"
+        [ngModelOptions]="{ standalone: true }"
+      ></textarea>
+    </div>
+  </div>
+  <div [class]="footerClass">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      [id]="firstButtonId"
+      (click)="btnCancelClick(f)"
+      data-bs-dismiss="modal"
+    >
+      {{ firstButtonName }}
+    </button>
+    <button
+      type="submit"
+      class="btn btn-secondary btn-sm"
+      [id]="secondButtonId"
+    >
+      {{ secondButtonName }}
+    </button>
+  </div>
+</form>

@@ -1,0 +1,53 @@
+<div *ngFor="let checkbox of permissionCheckbox; let i = index">
+  <hr *ngIf="i > 0 && i != permissionCheckbox.length" />
+  <p class="mb-3">
+    <span class="h5" role="button">
+      {{ checkbox.header }}
+    </span>
+    <span class="form-check d-inline ms-5">
+      <input
+        class="form-check-input float-none"
+        type="checkbox"
+        [id]="checkbox.id"
+        [(ngModel)]="checkbox.checked"
+        (change)="CheckAllOptionsForHead(checkbox)"
+      />
+      <label class="ps-1" [for]="checkbox.id"> Select all </label>
+    </span>
+  </p>
+  <div class="col-12" *ngFor="let listCheckBox of checkbox.viewList">
+    <p class="mt-2">
+      <span>
+        <strong
+          ><small>{{ listCheckBox.firstList }}</small></strong
+        >
+      </span>
+      <span class="form-check d-inline ms-3">
+        <input
+          class="form-check-input float-none"
+          type="checkbox"
+          [id]="listCheckBox.id"
+          [(ngModel)]="listCheckBox.checked"
+          (change)="CheckAllOptions(listCheckBox, checkbox)"
+        />
+        <label class="ps-1" [for]="listCheckBox.id"> Select all </label>
+      </span>
+    </p>
+
+    <span
+      class="form-check form-check-inline w-23 mt-2 mb-2"
+      *ngFor="let firstListData of listCheckBox.firstListData"
+    >
+      <input
+        class="form-check-input float-none"
+        type="checkbox"
+        [id]="firstListData.value"
+        [(ngModel)]="firstListData.checked"
+        [value]="firstListData.value"
+      />
+      <label class="form-check-label ps-1" [for]="firstListData.value">
+        {{ firstListData.name }}
+      </label>
+    </span>
+  </div>
+</div>

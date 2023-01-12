@@ -1,0 +1,24 @@
+<div class="col-12 mt-3">
+  <div class="mb-5">
+    <h2 class="d-inline col-8">Feedback Management</h2>
+    <div class="col-4 d-inline float-end">
+      <input
+        #txtSearch
+        type="text"
+        class="form-control d-inline"
+        placeholder="Search"
+        aria-label="search"
+        aria-describedby="search"
+        (input)="onSearchChange(txtSearch.value)"
+      />
+    </div>
+  </div>
+  <div>
+    <app-common-table-collection
+      [tableHeader]="tableHeader"
+      [tableData]="tableData"
+      [dropDownVal]="dropDownOptions"
+      [tblClass]="'table-striped table-bordered'"
+    ></app-common-table-collection>
+  </div>
+</div>
